@@ -1,0 +1,49 @@
+/* CSS File: style.css */
+
+/* Ensure body and html occupy full space */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: url('background.jpg') repeat; /* Use the uploaded image */
+  background-size: auto; /* Prevent blurring by keeping original size */
+}
+
+/* Centered button style */
+.center {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+button {
+  padding: 20px 40px;
+  background-color: rgba(52, 152, 219, 0.8); /* Slightly transparent blue */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: rgba(41, 128, 185, 0.8);
+}
+
+/* Hidden next-page content initially */
+.next-page {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: white;
+  font-size: 30px;
+}
