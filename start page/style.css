@@ -11,7 +11,26 @@ html {
   align-items: center;
   overflow: hidden;
   background: url('background.jpg') repeat; /* Use the uploaded image */
-  background-size: auto; /* Prevent blurring by keeping original size */
+  background-size: auto; /* Prevent blurring by keeping the original size */
+}
+
+/* Welcome message styling */
+.welcome-container {
+  position: absolute;
+  top: 20%; /* Position near the top of the page */
+  text-align: center;
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+.welcome-container h1 {
+  font-size: 48px;
+  margin: 0;
+}
+
+.welcome-container p {
+  font-size: 24px;
+  margin: 10px 0 20px 0;
 }
 
 /* Centered button style */
