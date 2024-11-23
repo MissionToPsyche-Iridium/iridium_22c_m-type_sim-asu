@@ -5,27 +5,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Psyche Asteroid</title>
     <style>
-      /* Center the image in the viewport */
+      /* Center everything */
       body,
       html {
         margin: 0;
         padding: 0;
         height: 100%;
         width: 100%;
+        background-color: black; /* Black background for overflow areas */
+        overflow: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: black; /* Background color behind the image */
-        overflow: hidden;
+        position: relative; /* For text and image positioning */
       }
-      img {
-        max-width: 90%; /* Adjusts the image width */
-        max-height: 90vh; /* Adjusts the image height */
-        object-fit: contain; /* Ensures the image is fully visible */
+
+      /* Transparent navigation bar */
+      #topBar {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 20px;
+        z-index: 10;
+      }
+
+      #topBar button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        background: none; /* Fully transparent background */
+        border: none; 
+        color: white;
+        font-size: 16px;
+        font-family: 'Arial', sans-serif;
+        cursor: pointer;
+        transition: color 0.3s ease; /* Smooth color transition */
+      }
+
+      #topBar button:hover {
+        color: rgba(255, 255, 255, 0.8); /* Slightly brighter text on hover */
+      }
+
+      /* Centered asteroid image */
+      #mainContent {
+        position: relative;
+        text-align: center;
+      }
+
+      #asteroidImage {
+        width: 60%;
+        height: auto; 
+      }
+
+      /* Text wrapping around the asteroid image */
+      #infoText {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-150%, -50%); /* Position text to the left of the image */
+        color: white;
+        font-family: 'Arial', sans-serif;
+        font-size: 18px;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+        padding: 10px 20px;
+        border-radius: 5px;
+        max-width: 40%; /* Restrict text width */
+        line-height: 1.5; /* Improve text readability */
+        white-space: normal; /* Allow text to wrap */
+        visibility: hidden; /* Initially hidden */
+        opacity: 0; /* Hidden with smooth fade-in later */
+        transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth fade-in effect */
+      }
+
+      /* Fact text container with audio button below and centered */
+      #factContainer {
+        display: flex;
+        flex-direction: column; /* Stack text and button vertically */
+        align-items: center; /* Center the button under the text */
+        gap: 10px; /* Add space between text and button */
+      }
+
+      #audioButton {
+        padding: 5px 10px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      #audioButton:hover {
+        background-color: rgba(255, 255, 255, 0.4); /* Slightly brighter on hover */
       }
     </style>
   </head>
   <body>
-    <img src="psyche_asteroid.jpg" alt="Psyche Asteroid" />
+    <!-- Click Sound -->
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
+    <!-- Transparent Navigation Bar -->
+    <div id="topBar">
+      <button onclick="playClickSound(); showInfo('psyche_asteroid.jpg', 'Psyche is believed to be composed mostly of metal, primarily iron and nickel, making it unique among other asteroids.')">Composition</button>
+      <button onclick="playClickSound(); showInfo('psyche_asteroid.jpg', 'Psyche is one of the largest asteroids in the asteroid belt, measuring about 140 miles in diameter.')">Size and Location</button>
+      <button onclick="playClickSound(); showInfo('psyche_asteroid.jpg', 'NASA\'s Psyche mission will explore this metal-rich world to uncover clues about planetary cores.')">The Mission</button>
+      <button onclick="playClickSound(); showInfo('psyche_asteroid.jpg', 'Scientists theorize that Psyche could be the remnants of a failed protoplanet whose outer layers were stripped away.')">Psyche's Origin</button>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+      <img id="asteroidImage" src="psyche_asteroid.jpg" alt="Psyche Asteroid" />
+      <div id="infoText">
+        <div id="factContainer">
+          <span id="factText"></span>
+          <button id="audioButton" onclick="playClickSound(); delaySpeakText()">🔊</button>
+        </div>
+      </div> <!-- Initially hidden -->
+    </div>
+
+    <script>
+      // Function to play the click sound
+      function playClickSound() {
+        const clickSound = document.getElementById('clickSound');
+        clickSound.play();
+      }
+
+      // Function to update image and text dynamically
+      function showInfo(imageSrc, infoText) {
+        // Update the asteroid image
+        const asteroidImage = document.getElementById('asteroidImage');
+        asteroidImage.src = imageSrc;
+
+        // Update the transparent info text
+        const factText = document.getElementById('factText');
+        factText.textContent = infoText;
+
+        // Make the info text visible
+        const infoBox = document.getElementById('infoText');
+        infoBox.style.visibility = 'visible';
+        infoBox.style.opacity = '1'; // Fade in the text
+      }
+
+      // Function to delay and then speak the text using SpeechSynthesis API
+      function delaySpeakText() {
+        const factText = document.getElementById('factText').textContent;
+
+        // Delay speaking to avoid overlapping with click sound
+        setTimeout(() => {
+          const speech = new SpeechSynthesisUtterance(factText);
+          speech.lang = 'en-US'; 
+          speech.pitch = 1;
+          speech.rate = 1; 
+          window.speechSynthesis.speak(speech);
+        }, 300); // small delay
+      }
+    </script>
   </body>
 </html>
