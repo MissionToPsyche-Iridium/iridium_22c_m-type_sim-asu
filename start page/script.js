@@ -23,8 +23,9 @@ document.getElementById('startButton').addEventListener('click', function () {
 document.getElementById('creditsButton').addEventListener('click', function () {
   const clickSound = document.getElementById('clickSound');
   clickSound.play(); // Play the sound on button click
-  document.getElementById('creditsText').innerHTML = 
-        `Disclaimer: This work was created in partial fulfillment of Arizona State University Capstone Course #66945.<br>
+  document.getElementById(
+    'creditsText'
+  ).innerHTML = `Disclaimer: This work was created in partial fulfillment of Arizona State University Capstone Course #66945.<br>
         The work is a result of the Psyche Student Collaborations component of NASA’s Psyche Mission (<a href="https://psyche.asu.edu" target="_blank">https://psyche.asu.edu</a>).<br>
         “Psyche: A Journey to a Metal World” [Contract number NNM16AA09C] is part of the NASA Discovery Program mission to solar system targets.<br>
         Trade names and trademarks of ASU and NASA are used in this work for identification only.<br>
