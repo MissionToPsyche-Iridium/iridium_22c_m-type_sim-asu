@@ -27,6 +27,20 @@ body:before {
   opacity: 0;
 }
 
+/* Logo Styling */
+.logo-container {
+  text-align: center;
+  margin-top: -160px;
+  margin-bottom: 50px;
+}
+
+#psycheLogo {
+  width: 150px; /* Adjust this value to make it smaller */
+  height: auto;
+  display: block;
+  margin: 0 auto; /* Ensures it's centered */
+}
+
 /* Welcome message styling */
 .welcome-container {
   position: absolute;
