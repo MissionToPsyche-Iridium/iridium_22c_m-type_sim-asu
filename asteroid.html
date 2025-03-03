@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Psyche Asteroid</title>
+    <style>
+      /* Center everything */
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        background-color: black; /* Black background for overflow areas */
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative; /* For text and image positioning */
+      }
+
+      /* Progress Bar Container */
+      #progressContainer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 8px;
+        background-color: rgba(255, 255, 255, 0.1);
+        z-index: 20;
+      }
+
+      /* Progress Bar Fill */
+      #progressBar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #f9a000, #f47c33, #ef5966, #a53f5b, #592651, #302144);
+        transition: width 0.3s ease;
+      }
+
+      /* Navigation arrows */
+      .nav-arrow {
+        position: absolute;
+        bottom: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .nav-arrow:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
+      #leftArrow {
+        left: 20px;
+      }
+
+      #rightArrow {
+        right: 20px;
+      }
+
+      /* Transparent navigation bar */
+      #topBar {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 20px;
+        z-index: 10;
+      }
+
+      #topBar button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        background: none; /* Fully transparent background */
+        border: none;
+        color: white;
+        font-size: 16px;
+        font-family: 'Arial', sans-serif;
+        cursor: pointer;
+        transition: color 0.3s ease; /* Smooth color transition */
+      }
+
+      #topBar button:hover {
+        color: rgba(255, 255, 255, 0.8); /* Slightly brighter text on hover */
+      }
+
+      /* Centered asteroid image */
+      #mainContent {
+        position: relative;
+        text-align: center;
+      }
+
+      #asteroidImage {
+        width: 60%;
+        height: auto;
+      }
+
+      /* Text wrapping around the asteroid image */
+      #infoText {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(
+          -150%,
+          -50%
+        ); /* Position text to the left of the image */
+        color: white;
+        font-family: 'Arial', sans-serif;
+        font-size: 18px;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+        padding: 10px 20px;
+        border-radius: 5px;
+        max-width: 40%; /* Restrict text width */
+        line-height: 1.5; /* Improve text readability */
+        white-space: normal; /* Allow text to wrap */
+        visibility: hidden; /* Initially hidden */
+        opacity: 0; /* Hidden with smooth fade-in later */
+        transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth fade-in effect */
+      }
+
+      /* Fact text container with audio button below and centered */
+      #factContainer {
+        display: flex;
+        flex-direction: column; /* Stack text and button vertically */
+        align-items: center; /* Center the button under the text */
+        gap: 10px; /* Add space between text and button */
+      }
+
+      #audioButton {
+        padding: 5px 10px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      #audioButton:hover {
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.4
+        ); /* Slightly brighter on hover */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Progress Bar -->
+    <div id="progressContainer">
+      <div id="progressBar"></div>
+    </div>
+
+    <!-- Click Sound -->
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
+    <!-- Transparent Navigation Bar -->
+    <div id="topBar">
+      <button
+        onclick="playClickSound(); showInfo('psyche_asteroid.jpg', 'Psyche is believed to be composed mostly of metal, primarily iron and nickel, making it unique among other asteroids.'); updateProgress(0);"
+      >
+        Composition
+      </button>
+      <button
+        onclick="playClickSound(); showInfo('psyche_asteroid.jpg', 'Psyche is one of the largest asteroids in the asteroid belt, measuring about 140 miles in diameter.'); updateProgress(1);"
+      >
+        Size and Location
+      </button>
+      <button
+        onclick="playClickSound(); showInfo('psyche_asteroid.jpg', 'NASA\'s Psyche mission will explore this metal-rich world to uncover clues about planetary cores.'); updateProgress(2);"
+      >
+        The Mission
+      </button>
+      <button
+        onclick="playClickSound(); showInfo('psyche_asteroid.jpg', 'Scientists theorize that Psyche could be the remnants of a failed protoplanet whose outer layers were stripped away.'); updateProgress(3);"
+      >
+        Psyche's Origin
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+      <img id="asteroidImage" src="psyche_asteroid.jpg" alt="Psyche Asteroid" />
+      <div id="infoText">
+        <div id="factContainer">
+          <span id="factText"></span>
+          <button id="audioButton" onclick="playClickSound(); delaySpeakText()">
+            🔊
+          </button>
+        </div>
+      </div>
+      <!-- Initially hidden -->
+    </div>
+
+    <!-- Navigation Arrows -->
+    <div
+      id="leftArrow"
+      class="nav-arrow"
+      onclick="setProgressAndNavigate(-1, 'index.html');"
+    >
+      ←
+    </div>
+    <div
+      id="rightArrow"
+      class="nav-arrow"
+      onclick="setProgressAndNavigate(4, 'asteroid2.html');"
+    >
+      →
+    </div>
+
+    <script>
+      let isSpeaking = false;
+      let currentUtterance = null;
+      let googleEnglishVoice = null;
+    
+      function loadVoices() {
+        const voices = speechSynthesis.getVoices();
+        googleEnglishVoice = voices.find(voice =>
+          voice.name.toLowerCase().includes('google') &&
+          (voice.lang.toLowerCase().includes('en') || voice.name.toLowerCase().includes('english'))
+        );
+      }
+    
+      // Make sure voices are loaded
+      if (speechSynthesis.getVoices().length > 0) {
+        loadVoices();
+      } else {
+        speechSynthesis.onvoiceschanged = loadVoices;
+      }
+    
+      function playClickSound() {
+        const clickSound = document.getElementById('clickSound');
+        clickSound.play();
+      }
+    
+      function showInfo(imageSrc, infoText) {
+        document.getElementById('asteroidImage').src = imageSrc;
+        document.getElementById('factText').textContent = infoText;
+        const infoBox = document.getElementById('infoText');
+        infoBox.style.visibility = 'visible';
+        infoBox.style.opacity = '1';
+      }
+    
+      function delaySpeakText() {
+        const synth = window.speechSynthesis;
+    
+        if (isSpeaking) {
+          synth.cancel();
+          isSpeaking = false;
+          return;
+        }
+    
+        const factText = document.getElementById('factText').textContent;
+    
+        setTimeout(() => {
+          currentUtterance = new SpeechSynthesisUtterance(factText);
+          currentUtterance.lang = 'en-US';
+          currentUtterance.pitch = 1.1;
+          currentUtterance.rate = 0.95;
+    
+          if (googleEnglishVoice) {
+            currentUtterance.voice = googleEnglishVoice;
+          }
+    
+          synth.speak(currentUtterance);
+          isSpeaking = true;
+    
+          currentUtterance.onend = () => {
+            isSpeaking = false;
+          };
+        }, 300);
+      }
+
+      const pageProgress = {
+        'asteroid.html': 0,
+        'asteroid2.html': 25,
+        'asteroid3.html': 50,
+        'asteroid4.html': 75,
+      };
+      
+      const currentPage = window.location.pathname.split('/').pop();
+      let sectionProgress = 0;
+      
+      function updateProgress(cumulativeIndex) {
+        const totalSections = 16;
+        const progressPercent = ((cumulativeIndex + 1) / totalSections) * 100;
+        document.getElementById('progressBar').style.width = `${progressPercent}%`;
+      }
+      
+      function setProgressAndNavigate(cumulativeIndex, targetPage) {
+        const totalSections = 16;
+        const progressPercent = cumulativeIndex >= 0 ? ((cumulativeIndex + 1) / totalSections) * 100 : 0;
+        localStorage.setItem('progressPercent', progressPercent);
+        window.location.href = targetPage;
+      }
+      
+      // Restore progress on page load
+      window.onload = function() {
+        const savedProgress = localStorage.getItem('progressPercent');
+        if (savedProgress) {
+          document.getElementById('progressBar').style.width = `${savedProgress}%`;
+        }
+      };
+    </script>    
+  </body>
+</html>

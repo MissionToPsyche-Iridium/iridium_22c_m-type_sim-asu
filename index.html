@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Psyche</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Psyche Logo -->
+    <div class="logo-container">
+      <img src="logo.jpg" alt="Psyche Mission Logo" id="psycheLogo" />
+    </div>
+
+    <!-- Welcome Message -->
+    <div class="welcome-container">
+      <h1>Welcome to Psyche</h1>
+      <p>Click Start to Begin</p>
+    </div>
+
+    <!-- Start and Credits button in the center -->
+    <div class="center">
+      <button id="startButton">Start</button>
+      <button id="creditsButton">Credits</button>
+    </div>
+
+    <!-- Credits -->
+    <div id="creditsModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" id="closeCredits">&times;</span>
+        <h2>Credits And Disclaimers</h2>
+        <p id="creditsText">
+          <!-- Created by Ash Ashour, Aureliano Ceballos, Dillon Garcia, Viet Le and NASA Psyche Team -->
+        </p>
+      </div>
+    </div>
+
+    <div class="next-page" id="nextPage">
+      <img
+        id="nextPageImage"
+        src=""
+        alt="Next Page Image"
+        style="display: none"
+      />
+    </div>
+
+    <!-- Click Sound -->
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+  </body>
+</html>
