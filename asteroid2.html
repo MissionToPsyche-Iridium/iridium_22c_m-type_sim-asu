@@ -227,6 +227,11 @@
       →
     </div>
 
+    <div id="errorMessage" style="position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); color: red; font-size: 18px; display: none;">
+      Please view all sections before proceeding!
+    </div>
+    
+
     <script>
       let isSpeaking = false;
       let currentUtterance = null;
@@ -300,26 +305,43 @@
       const currentPage = window.location.pathname.split('/').pop();
       let sectionProgress = 0;
       
-      function updateProgress(cumulativeIndex) {
-        const totalSections = 16;
-        const progressPercent = ((cumulativeIndex + 1) / totalSections) * 100;
-        document.getElementById('progressBar').style.width = `${progressPercent}%`;
+      const totalSections = 4; 
+      let viewedSections = new Set();
+
+      function updateProgress(sectionIndex) {
+        viewedSections.add(sectionIndex);
+        const pageBaseProgress = 25;
+        const sectionContribution = (viewedSections.size / totalSections) * 25;
+        const totalProgress = pageBaseProgress + sectionContribution;
+        
+        document.getElementById('progressBar').style.width = `${totalProgress}%`;
+        localStorage.setItem('totalProgress', totalProgress);
       }      
 
       function setProgressAndNavigate(cumulativeIndex, targetPage) {
-        const totalSections = 16;
-        const progressPercent = cumulativeIndex >= 0 ? ((cumulativeIndex + 1) / totalSections) * 100 : 0;
+        if (viewedSections.size < totalSections) {
+          showErrorMessage();
+          return;
+        }
+        const progressPercent = ((cumulativeIndex + 1) / 16) * 100;
         localStorage.setItem('progressPercent', progressPercent);
         window.location.href = targetPage;
       }
-      
-      // Restore progress on page load
-      window.onload = function() {
-        const savedProgress = localStorage.getItem('progressPercent');
+
+      function showErrorMessage() {
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.style.display = 'block';
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 3000);
+      }
+
+      window.onload = function () {
+        const savedProgress = localStorage.getItem('totalProgress');
         if (savedProgress) {
-          document.getElementById('progressBar').style.width = `${savedProgress}%`;
+          document.getElementById('progressBar').style.width = savedProgress + '%';
         }
-      };
+      };      
     </script>    
   </body>
 </html>
