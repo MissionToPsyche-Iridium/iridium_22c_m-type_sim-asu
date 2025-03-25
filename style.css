@@ -10,14 +10,14 @@ html {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: url('background.jpg') repeat;
+  background: url('images/background.jpg') repeat;
   background-size: auto;
 }
 
 /* Preload background image */
 body:before {
   content: '';
-  background: url('background.jpg') no-repeat center center fixed;
+  background: url('images/background.jpg') no-repeat center center fixed;
   background-size: cover;
   position: fixed;
   top: 0;
