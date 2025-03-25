@@ -35,7 +35,7 @@
       #progressBar {
         height: 100%;
         width: 0%;
-        background: linear-gradient(90deg, #f9a000, #f47c33, #ef5966, #a53f5b, #592651, #302144);
+        background: yellow;
         transition: width 0.3s ease;
       }
 
@@ -227,36 +227,48 @@
       →
     </div>
 
-    <div id="errorMessage" style="position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); color: red; font-size: 18px; display: none;">
+    <div
+      id="errorMessage"
+      style="
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: red;
+        font-size: 18px;
+        display: none;
+      "
+    >
       Please view all sections before proceeding!
     </div>
-    
 
     <script>
       let isSpeaking = false;
       let currentUtterance = null;
       let googleEnglishVoice = null;
-    
+
       function loadVoices() {
         const voices = speechSynthesis.getVoices();
-        googleEnglishVoice = voices.find(voice =>
-          voice.name.toLowerCase().includes('google') &&
-          (voice.lang.toLowerCase().includes('en') || voice.name.toLowerCase().includes('english'))
+        googleEnglishVoice = voices.find(
+          (voice) =>
+            voice.name.toLowerCase().includes('google') &&
+            (voice.lang.toLowerCase().includes('en') ||
+              voice.name.toLowerCase().includes('english'))
         );
       }
-    
+
       // Make sure voices are loaded
       if (speechSynthesis.getVoices().length > 0) {
         loadVoices();
       } else {
         speechSynthesis.onvoiceschanged = loadVoices;
       }
-    
+
       function playClickSound() {
         const clickSound = document.getElementById('clickSound');
         clickSound.play();
       }
-    
+
       function showInfo(imageSrc, infoText) {
         document.getElementById('asteroidImage').src = imageSrc;
         document.getElementById('factText').textContent = infoText;
@@ -264,31 +276,31 @@
         infoBox.style.visibility = 'visible';
         infoBox.style.opacity = '1';
       }
-    
+
       function delaySpeakText() {
         const synth = window.speechSynthesis;
-    
+
         if (isSpeaking) {
           synth.cancel();
           isSpeaking = false;
           return;
         }
-    
+
         const factText = document.getElementById('factText').textContent;
-    
+
         setTimeout(() => {
           currentUtterance = new SpeechSynthesisUtterance(factText);
           currentUtterance.lang = 'en-US';
           currentUtterance.pitch = 1.1;
           currentUtterance.rate = 0.95;
-    
+
           if (googleEnglishVoice) {
             currentUtterance.voice = googleEnglishVoice;
           }
-    
+
           synth.speak(currentUtterance);
           isSpeaking = true;
-    
+
           currentUtterance.onend = () => {
             isSpeaking = false;
           };
@@ -301,11 +313,11 @@
         'asteroid3.html': 50,
         'asteroid4.html': 75,
       };
-      
+
       const currentPage = window.location.pathname.split('/').pop();
       let sectionProgress = 0;
-      
-      const totalSections = 4; 
+
+      const totalSections = 4;
       let viewedSections = new Set();
 
       function updateProgress(sectionIndex) {
@@ -313,10 +325,12 @@
         const pageBaseProgress = 25;
         const sectionContribution = (viewedSections.size / totalSections) * 25;
         const totalProgress = pageBaseProgress + sectionContribution;
-        
-        document.getElementById('progressBar').style.width = `${totalProgress}%`;
+
+        document.getElementById(
+          'progressBar'
+        ).style.width = `${totalProgress}%`;
         localStorage.setItem('totalProgress', totalProgress);
-      }      
+      }
 
       function setProgressAndNavigate(cumulativeIndex, targetPage) {
         if (viewedSections.size < totalSections) {
@@ -339,9 +353,10 @@
       window.onload = function () {
         const savedProgress = localStorage.getItem('totalProgress');
         if (savedProgress) {
-          document.getElementById('progressBar').style.width = savedProgress + '%';
+          document.getElementById('progressBar').style.width =
+            savedProgress + '%';
         }
-      };      
-    </script>    
+      };
+    </script>
   </body>
 </html>
